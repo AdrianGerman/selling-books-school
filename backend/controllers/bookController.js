@@ -10,6 +10,21 @@ exports.getAllBooks = async (req, res) => {
   }
 }
 
+exports.getBookById = async (req, res) => {
+  const { id } = req.params
+  try {
+    const book = await Book.getById(id)
+    if (book) {
+      res.json(book)
+    } else {
+      res.status(404).json({ message: "Libro no encontrado" })
+    }
+  } catch (error) {
+    console.error("Error al obtener el libro:", error)
+    res.status(500).json({ message: "Error interno del servidor" })
+  }
+}
+
 exports.createBook = async (req, res) => {
   const { title, subject, price, stock, cycle } = req.body
   try {
