@@ -38,16 +38,16 @@ exports.createBook = async (req, res) => {
 
 exports.updateBook = async (req, res) => {
   const { id } = req.params
-  const { title, subject, price, stock, cycle } = req.body
+  const fieldsToUpdate = {}
+
+  if (req.body.title !== undefined) fieldsToUpdate.title = req.body.title
+  if (req.body.subject !== undefined) fieldsToUpdate.subject = req.body.subject
+  if (req.body.price !== undefined) fieldsToUpdate.price = req.body.price
+  if (req.body.stock !== undefined) fieldsToUpdate.stock = req.body.stock
+  if (req.body.cycle !== undefined) fieldsToUpdate.cycle = req.body.cycle
+
   try {
-    const updatedBook = await Book.update(
-      id,
-      title,
-      subject,
-      price,
-      stock,
-      cycle
-    )
+    const updatedBook = await Book.update(id, fieldsToUpdate)
     res.json(updatedBook)
   } catch (error) {
     console.error("Error al actualizar el libro:", error)
