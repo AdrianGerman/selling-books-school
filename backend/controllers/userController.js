@@ -1,6 +1,24 @@
 const jwt = require("jsonwebtoken")
 const User = require("../models/User")
 
+exports.register = async (req, res) => {
+  const { username, password, role } = req.body
+  try {
+    const existingUser = await User.getByUsername(username)
+    if (existingUser) {
+      return res.status(400).json({ message: "El usuario ya existe" })
+    }
+
+    const newUser = await User.create(username, password, role)
+    res
+      .status(201)
+      .json({ message: "Usuario registrado exitosamente", user: newUser })
+  } catch (error) {
+    console.error("Error al registrar el usuario:", error)
+    res.status(500).json({ message: "Error interno del servidor" })
+  }
+}
+
 exports.login = async (req, res) => {
   const { username, password } = req.body
   try {
