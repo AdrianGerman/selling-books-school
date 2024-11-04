@@ -21,8 +21,10 @@ app.get("/", (req, res) => {
 const bookRoutes = require("./routes/bookRoutes")
 const studentRoutes = require("./routes/studentRoutes")
 const userRoutes = require("./routes/userRoutes")
+const purchaseRoutes = require("./routes/purchaseRoutes")
 
 // asignación de rutas
+app.use("/api/purchase", purchaseRoutes)
 app.use("/api/books", bookRoutes)
 app.use("/api/students", studentRoutes)
 app.use("/api/users", userRoutes)
