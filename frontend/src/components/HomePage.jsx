@@ -7,19 +7,18 @@ const HomePage = () => {
   useEffect(() => {
     const loadBooks = async () => {
       try {
-        // Llamada a la API con fetch
         const response = await fetch("http://localhost:3000/api/books")
         if (!response.ok) {
           throw new Error("Error al cargar los libros.")
         }
         const books = await response.json()
 
-        // Agrupar los libros por ciclo
         const groupedBooks = books.reduce((acc, book) => {
           if (!acc[book.cycle]) {
-            acc[book.cycle] = []
+            acc[book.cycle] = { books: [], totalStock: 0 }
           }
-          acc[book.cycle].push(book)
+          acc[book.cycle].books.push(book)
+          acc[book.cycle].totalStock += book.stock
           return acc
         }, {})
 
@@ -33,29 +32,62 @@ const HomePage = () => {
     loadBooks()
   }, [])
 
+  const handleBuyPackage = (cycle) => {
+    const selectedBooks = booksByCycle[cycle]?.books || []
+    console.log("Comprar paquete del semestre:", cycle, selectedBooks)
+  }
+
+  const handleSelectBooks = (cycle) => {
+    console.log("Seleccionar libros del semestre:", cycle)
+  }
+
   if (error) {
     return <div className="p-8 text-red-500">{error}</div>
   }
 
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold mb-6">Libros por Semestre</h1>
+    <div className="flex flex-col justify-center items-center my-6">
       {Object.keys(booksByCycle).map((cycle) => (
-        <div key={cycle} className="mb-6">
-          <h2 className="text-xl font-semibold mb-4">Semestre {cycle}</h2>
-          <ul className="flex gap-2">
-            {booksByCycle[cycle].map((book) => (
+        <div
+          key={cycle}
+          className="w-full md:w-1/2 mb-6 bg-[#323232] p-4 rounded"
+        >
+          <div className="flex justify-between">
+            <h2 className="text-xl font-semibold mb-4">Semestre {cycle}</h2>
+            <h2 className="font-semibold mb-4">
+              {booksByCycle[cycle]?.totalStock || 0} unidades
+            </h2>
+          </div>
+          <ul className="flex gap-3 flex-wrap justify-center items-center">
+            {(booksByCycle[cycle]?.books || []).map((book) => (
               <li
                 key={book.id}
-                className="p-4 border rounded shadow-sm bg-[#323232]"
+                className="p-4 border rounded shadow-sm bg-[#323232] text-white w-48 flex flex-col justify-between transform transition duration-200 hover:scale-105"
               >
-                <h3 className="text-lg font-bold">{book.title}</h3>
-                <p>Materia: {book.subject}</p>
-                <p>Precio: ${book.price}</p>
-                <p>Stock: {book.stock} unidades</p>
+                <div>
+                  <h3 className="text-lg font-bold">{book.title}</h3>
+                </div>
+                <div>
+                  <p>Precio: ${book.price}</p>
+                  <p>Stock: {book.stock} unidades</p>
+                </div>
               </li>
             ))}
           </ul>
+          <div className="flex justify-center items-center gap-4 mt-4">
+            <button
+              onClick={() => handleBuyPackage(cycle)}
+              className="bg-[#613BEC] text-white p-2 rounded transform transition duration-300 hover:bg-[#4c2eb7] hover:scale-105"
+            >
+              Comprar paquete
+            </button>
+            <button
+              onClick={() => handleSelectBooks(cycle)}
+              className="bg-green-500 text-white p-2 rounded transform transition duration-300 hover:bg-green-700 hover:scale-105"
+            >
+              Seleccionar
+            </button>
+          </div>
         </div>
       ))}
     </div>
