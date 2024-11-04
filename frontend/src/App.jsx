@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
-
+import "@fontsource-variable/onest"
 import "./App.css"
 import AuthComponent from "./components/LoginPage"
 import HomePage from "./components/HomePage"
