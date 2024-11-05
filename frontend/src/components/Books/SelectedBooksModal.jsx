@@ -1,7 +1,8 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 const SelectBooksModal = ({ books, onClose, onConfirmSelection }) => {
   const [selectedBooks, setSelectedBooks] = useState([])
+  const [totalAmount, setTotalAmount] = useState(0)
 
   const toggleBookSelection = (book) => {
     setSelectedBooks((prevSelected) =>
@@ -11,6 +12,14 @@ const SelectBooksModal = ({ books, onClose, onConfirmSelection }) => {
     )
   }
 
+  useEffect(() => {
+    const total = selectedBooks.reduce(
+      (sum, book) => sum + parseFloat(book.price || 0),
+      0
+    )
+    setTotalAmount(total)
+  }, [selectedBooks])
+
   const handleNext = () => {
     onConfirmSelection(selectedBooks)
     onClose()
@@ -18,15 +27,17 @@ const SelectBooksModal = ({ books, onClose, onConfirmSelection }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white p-6 rounded shadow-md w-80">
-        <h2 className="text-xl font-semibold mb-4">Seleccionar Libros</h2>
+      <div className="bg-[#323232] p-6 rounded shadow-md w-80">
+        <h2 className="text-xl font-semibold mb-4 text-center">
+          Seleccionar Libros
+        </h2>
         <ul className="max-h-60 overflow-y-auto">
           {books.map((book) => (
             <li
               key={book.id}
               onClick={() => toggleBookSelection(book)}
-              className={`p-2 border rounded cursor-pointer ${
-                selectedBooks.includes(book) ? "bg-green-200" : "bg-gray-200"
+              className={`p-2 rounded cursor-pointer mb-2 ${
+                selectedBooks.includes(book) ? "bg-gray-600" : "bg-gray-950"
               }`}
             >
               <div>
@@ -36,7 +47,12 @@ const SelectBooksModal = ({ books, onClose, onConfirmSelection }) => {
             </li>
           ))}
         </ul>
-        <div className="flex justify-end gap-2 mt-4">
+        <div className="mt-4">
+          <p className="text-center text-lg font-semibold">
+            Total seleccionado: ${totalAmount.toFixed(2)}
+          </p>
+        </div>
+        <div className="flex justify-center gap-2 mt-4">
           <button
             onClick={onClose}
             className="bg-gray-500 text-white p-2 rounded"
