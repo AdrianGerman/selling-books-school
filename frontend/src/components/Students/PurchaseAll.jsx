@@ -107,13 +107,13 @@ const PurchaseAll = ({ onClose, onConfirm, totalAmount }) => {
         <div className="flex justify-center gap-2 mt-4">
           <button
             onClick={onClose}
-            className="bg-red-500 hover:bg-red-600 p-2 rounded"
+            className="transform transition duration-300 bg-red-500 hover:bg-red-600 hover:scale-105 p-2 rounded"
           >
             Cancelar
           </button>
           <button
             onClick={handleConfirm}
-            className="bg-[#613BEC] hover:bg-[#4c2eb7] p-2 rounded"
+            className="transform transition duration-300 bg-[#613BEC] hover:bg-[#4c2eb7] hover:scale-105 p-2 rounded"
           >
             Confirmar compra
           </button>

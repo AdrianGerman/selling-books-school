@@ -62,13 +62,13 @@ const SelectBooksModal = ({ books, onClose, onConfirmSelection }) => {
         <div className="flex justify-center gap-2 mt-4">
           <button
             onClick={onClose}
-            className="bg-red-500 hover:bg-red-600 text-white p-2 rounded"
+            className="transform transition duration-300 bg-red-500 hover:bg-red-600 hover:scale-105 text-white p-2 rounded"
           >
             Cancelar
           </button>
           <button
             onClick={handleNext}
-            className="bg-[#613BEC] hover:bg-[#4c2eb7] text-white p-2 rounded"
+            className="transform transition duration-300 bg-[#613BEC] hover:bg-[#4c2eb7] hover:scale-105 text-white p-2 rounded"
           >
             Siguiente
           </button>
