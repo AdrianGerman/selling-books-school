@@ -7,6 +7,13 @@ const PurchaseAll = ({ onClose, onConfirm, totalAmount }) => {
   const [error, setError] = useState(null)
 
   useEffect(() => {
+    document.body.style.overflow = "hidden"
+    return () => {
+      document.body.style.overflow = "auto"
+    }
+  }, [])
+
+  useEffect(() => {
     const fetchStudentName = async () => {
       if (studentCode.trim().length !== 9) {
         setStudentName("")
