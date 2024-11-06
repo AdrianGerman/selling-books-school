@@ -1,4 +1,3 @@
--- Active: 1730728995038@@127.0.0.1@3306@selling_books
 CREATE TABLE books (
     id SERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
@@ -23,7 +22,7 @@ CREATE TABLE users (
 CREATE TABLE sales (
     id SERIAL PRIMARY KEY,
     student_id BIGINT UNSIGNED NOT NULL,
-    sale_date DATE NOT NULL,
+    sale_date DATETIME NOT NULL,
     total_amount DECIMAL(10, 2) NOT NULL,
     amount_paid DECIMAL(10, 2) DEFAULT 0.00,
     remaining_balance DECIMAL(10, 2) NOT NULL,
