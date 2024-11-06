@@ -4,6 +4,7 @@ import "./App.css"
 import AuthComponent from "./components/LoginPage"
 import HomePage from "./components/HomePage"
 import Header from "./components/Header"
+import HistoryPage from "./components/Header/HistoryPage"
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Routes>
         <Route path="/login" Component={AuthComponent} />
         <Route path="/" Component={HomePage} />
+        <Route path="/historial" element={<HistoryPage />} />
       </Routes>
     </Router>
   )
