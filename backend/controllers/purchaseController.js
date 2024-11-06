@@ -14,7 +14,7 @@ exports.getAllPurchases = async (req, res) => {
 exports.createPurchase = async (req, res) => {
   const {
     cycle,
-    books, // Este es el arreglo de IDs simples
+    books,
     studentName,
     studentCode,
     totalAmount,
@@ -24,7 +24,6 @@ exports.createPurchase = async (req, res) => {
   } = req.body
 
   try {
-    // Buscar el ID del estudiante usando su código
     const [studentRows] = await pool.query(
       "SELECT id FROM students WHERE student_code = ?",
       [studentCode]
@@ -34,21 +33,19 @@ exports.createPurchase = async (req, res) => {
     }
     const studentId = studentRows[0].id
 
-    // Convertir `books` a un arreglo de objetos que incluya `book_id`, `quantity`, y `item_price`
     const formattedBooks = books.map((bookId) => ({
       book_id: bookId,
-      quantity: 1, // Asumiendo que cada libro en el paquete tiene una cantidad de 1
-      item_price: totalAmount / books.length // Dividiendo el precio total entre la cantidad de libros
+      quantity: 1,
+      item_price: totalAmount / books.length
     }))
 
-    // Crear la compra usando el modelo `Purchase`
     const saleId = await Purchase.create(
       studentId,
       parseFloat(totalAmount),
       parseFloat(amountToPay),
       parseFloat(remainingBalance),
       isPaid,
-      formattedBooks // Pasar el arreglo con el formato adecuado
+      formattedBooks
     )
 
     res.status(201).json({
@@ -58,6 +55,39 @@ exports.createPurchase = async (req, res) => {
     })
   } catch (error) {
     console.error("Error al realizar la compra:", error)
+    res.status(500).json({ message: "Error interno del servidor" })
+  }
+}
+
+exports.getAllPurchasesByDateTime = async (req, res) => {
+  try {
+    const purchases = await Purchase.getAllByDateTime()
+    res.json(purchases)
+  } catch (error) {
+    console.error("Error al obtener las compras:", error)
+    res.status(500).json({ message: "Error interno del servidor" })
+  }
+}
+
+exports.deletePurchase = async (req, res) => {
+  const { id } = req.params
+  try {
+    await Purchase.deleteById(id)
+    res.status(200).json({ message: "Compra eliminada exitosamente" })
+  } catch (error) {
+    console.error("Error al eliminar la compra:", error)
+    res.status(500).json({ message: "Error interno del servidor" })
+  }
+}
+
+exports.deleteAllPurchases = async (req, res) => {
+  try {
+    await Purchase.deleteAll()
+    res
+      .status(200)
+      .json({ message: "Todas las compras han sido eliminadas exitosamente" })
+  } catch (error) {
+    console.error("Error al eliminar todas las compras:", error)
     res.status(500).json({ message: "Error interno del servidor" })
   }
 }
