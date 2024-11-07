@@ -1,4 +1,4 @@
-const CycleBooksList = ({ cycle, books, onBuyPackage, onSelectBooks }) => {
+const BooksList = ({ cycle, books, onBuyPackage, onSelectBooks }) => {
   return (
     <div className="mb-6 bg-[#323232] p-4 rounded">
       <div className="flex justify-between">
@@ -39,4 +39,4 @@ const CycleBooksList = ({ cycle, books, onBuyPackage, onSelectBooks }) => {
   )
 }
 
-export default CycleBooksList
+export default BooksList

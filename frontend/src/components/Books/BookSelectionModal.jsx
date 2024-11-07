@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 
-const SelectBooksModal = ({ books, onClose, onConfirmSelection }) => {
+const BookSelectionModal = ({ books, onClose, onConfirmSelection }) => {
   const [selectedBooks, setSelectedBooks] = useState([])
   const [totalAmount, setTotalAmount] = useState(0)
 
@@ -78,4 +78,4 @@ const SelectBooksModal = ({ books, onClose, onConfirmSelection }) => {
   )
 }
 
-export default SelectBooksModal
+export default BookSelectionModal

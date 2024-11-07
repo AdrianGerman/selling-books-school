@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 
-const PurchaseAll = ({ onClose, onConfirm, totalAmount }) => {
+const PurchaseModal = ({ onClose, onConfirm, totalAmount }) => {
   const [studentName, setStudentName] = useState("")
   const [studentCode, setStudentCode] = useState("")
   const [amountToPay, setAmountToPay] = useState(totalAmount)
@@ -123,4 +123,4 @@ const PurchaseAll = ({ onClose, onConfirm, totalAmount }) => {
   )
 }
 
-export default PurchaseAll
+export default PurchaseModal

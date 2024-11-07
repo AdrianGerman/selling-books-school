@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
-import Modal from "./Students/PurchaseAll"
-import CycleBooksList from "./Books/CycleBooksList"
-import SelectBooksModal from "./Books/SelectedBooksModal"
+import PurchaseModal from "../Books/PurchaseModal"
+import BooksList from "../Books/BooksList"
+import BookSelectionModal from "../Books/BookSelectionModal"
 
 const HomePage = ({ refreshEarnings }) => {
   const [booksByCycle, setBooksByCycle] = useState({})
@@ -144,7 +144,7 @@ const HomePage = ({ refreshEarnings }) => {
   return (
     <div className="flex flex-col justify-center items-center my-6 p-4">
       {Object.keys(booksByCycle).map((cycle) => (
-        <CycleBooksList
+        <BooksList
           key={cycle}
           cycle={cycle}
           books={booksByCycle[cycle]}
@@ -153,14 +153,14 @@ const HomePage = ({ refreshEarnings }) => {
         />
       ))}
       {isSelectBooksModalOpen && (
-        <SelectBooksModal
+        <BookSelectionModal
           books={booksByCycle[selectedCycle]?.books || []}
           onClose={() => setIsSelectBooksModalOpen(false)}
           onConfirmSelection={handleConfirmSelection}
         />
       )}
       {isModalOpen && (
-        <Modal
+        <PurchaseModal
           onClose={() => setIsModalOpen(false)}
           onConfirm={handleConfirmPurchase}
           totalAmount={totalAmount || 0}
