@@ -82,7 +82,7 @@ const HistoryPage = () => {
   }
 
   return (
-    <div className="p-6 lg:w-2/4 w-auto m-auto">
+    <div className="p-6 lg:w-3/4 w-auto lg:m-auto">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Historial de Compras</h1>
         <div className="flex gap-2">
@@ -149,7 +149,12 @@ const HistoryPage = () => {
               </div>
               <div className="">
                 <p>{purchase.items.length} libros</p>
-                <p>${parseFloat(purchase.total_amount).toFixed(2)} mxn</p>
+                <p>
+                  {parseFloat(purchase.total_amount).toLocaleString("es-MX", {
+                    style: "currency",
+                    currency: "MXN"
+                  })}
+                </p>
               </div>
               <button
                 onClick={() => handleDeletePurchase(purchase.sale_id)}

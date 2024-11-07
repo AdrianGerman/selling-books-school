@@ -5,6 +5,7 @@ import AuthComponent from "./components/LoginPage"
 import HomePage from "./components/HomePage"
 import Header from "./components/Header"
 import HistoryPage from "./components/Header/HistoryPage"
+import EarningsPage from "./components/Header/EarningsPage"
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/login" Component={AuthComponent} />
         <Route path="/" Component={HomePage} />
         <Route path="/historial" element={<HistoryPage />} />
+        <Route path="/ingresos" element={<EarningsPage />} />
       </Routes>
     </Router>
   )

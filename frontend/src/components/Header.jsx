@@ -1,11 +1,24 @@
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+import { fetchTodayEarnings } from "./utils/earningsUtils"
 
 const Header = () => {
+  const [todayEarnings, setTodayEarnings] = useState(null)
+
+  useEffect(() => {
+    const getTodayEarnings = async () => {
+      const earnings = await fetchTodayEarnings()
+      setTodayEarnings(earnings)
+    }
+
+    getTodayEarnings()
+  }, [])
+
   return (
     <div className="w-full h-20 bg-[#323232] flex justify-between items-center p-6">
       <div className="flex justify-center items-center gap-2">
         <img src="./library.svg" alt="library icon" className="w-10 h-10" />
-        <Link to="/">
+        <Link to={"/"}>
           <h1 className="text-4xl font-bold">SellBooks</h1>
         </Link>
       </div>
@@ -26,7 +39,12 @@ const Header = () => {
           className="transform transition duration-300 hover:scale-105"
           to="/ingresos"
         >
-          $ sum ganancias x día
+          {todayEarnings !== null
+            ? parseFloat(todayEarnings).toLocaleString("es-MX", {
+                style: "currency",
+                currency: "MXN"
+              })
+            : "Cargando..."}
         </Link>
       </div>
     </div>
