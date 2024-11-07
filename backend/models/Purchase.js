@@ -30,6 +30,22 @@ const Purchase = {
            VALUES (?, ?, ?, ?)`,
           [saleId, book.book_id, book.quantity, book.item_price]
         )
+
+        await connection.query(
+          `UPDATE books SET stock = stock - ? WHERE id = ? AND stock >= ?`,
+          [book.quantity, book.book_id, book.quantity]
+        )
+
+        const [updatedStock] = await connection.query(
+          `SELECT stock FROM books WHERE id = ?`,
+          [book.book_id]
+        )
+
+        if (updatedStock[0].stock < 0) {
+          throw new Error(
+            `Stock insuficiente para el libro con ID ${book.book_id}`
+          )
+        }
       }
 
       await connection.commit()
@@ -177,6 +193,19 @@ const Purchase = {
     } finally {
       connection.release()
     }
+  },
+
+  getDailyEarnings: async () => {
+    const [rows] = await pool.query(`
+      SELECT 
+        DATE(sale_date) AS sale_date,
+        SUM(amount_paid) AS daily_earnings
+      FROM sales
+      GROUP BY DATE(sale_date)
+      ORDER BY sale_date DESC
+    `)
+
+    return rows
   }
 }
 

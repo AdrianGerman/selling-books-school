@@ -91,3 +91,13 @@ exports.deleteAllPurchases = async (req, res) => {
     res.status(500).json({ message: "Error interno del servidor" })
   }
 }
+
+exports.getDailyEarnings = async (req, res) => {
+  try {
+    const earnings = await Purchase.getDailyEarnings()
+    res.json(earnings)
+  } catch (error) {
+    console.error("Error al obtener las ganancias diarias:", error)
+    res.status(500).json({ message: "Error interno del servidor" })
+  }
+}

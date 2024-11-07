@@ -4,6 +4,7 @@ const purchaseController = require("../controllers/purchaseController")
 
 router.get("/", purchaseController.getAllPurchases)
 router.get("/by-datetime", purchaseController.getAllPurchasesByDateTime)
+router.get("/daily-earnings", purchaseController.getDailyEarnings)
 router.post("/", purchaseController.createPurchase)
 router.delete("/", purchaseController.deleteAllPurchases)
 router.delete("/:id", purchaseController.deletePurchase)
