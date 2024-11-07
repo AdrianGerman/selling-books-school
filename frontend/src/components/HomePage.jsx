@@ -40,6 +40,27 @@ const HomePage = () => {
     loadBooks()
   }, [])
 
+  const updateStockAfterPurchase = (purchasedBooks) => {
+    setBooksByCycle((prevBooksByCycle) => {
+      const updatedBooksByCycle = { ...prevBooksByCycle }
+
+      purchasedBooks.forEach((book) => {
+        const cycle = updatedBooksByCycle[selectedCycle]
+        const bookToUpdate = cycle.books.find((b) => b.id === book.id)
+        if (bookToUpdate) {
+          bookToUpdate.stock -= 1
+        }
+
+        cycle.totalStock = cycle.books.reduce(
+          (sum, book) => sum + book.stock,
+          0
+        )
+      })
+
+      return updatedBooksByCycle
+    })
+  }
+
   const handleBuyPackage = (cycle) => {
     const selectedBooks = booksByCycle[cycle]?.books || []
     const total = selectedBooks.reduce((sum, book) => {
@@ -55,7 +76,7 @@ const HomePage = () => {
 
   const handleSelectBooks = (cycle) => {
     setSelectedCycle(cycle)
-    setIsSelectBooksModalOpen(true) // Abre el modal de selección de libros
+    setIsSelectBooksModalOpen(true)
   }
 
   const handleConfirmSelection = (books) => {
@@ -65,7 +86,7 @@ const HomePage = () => {
       0
     )
     setTotalAmount(total)
-    setIsModalOpen(true) // Abre el modal de compra con los libros seleccionados
+    setIsModalOpen(true)
   }
 
   const handleConfirmPurchase = async ({
@@ -74,7 +95,10 @@ const HomePage = () => {
     amountToPay,
     remainingBalance
   }) => {
-    const bookIds = selectedBooks.map((book) => book.id)
+    const purchasedBooks = selectedBooks.map((book) => ({
+      id: book.id,
+      quantity: 1
+    }))
 
     try {
       const response = await fetch("http://localhost:3000/api/purchase", {
@@ -84,7 +108,7 @@ const HomePage = () => {
         },
         body: JSON.stringify({
           cycle: selectedCycle,
-          books: bookIds,
+          books: purchasedBooks.map((book) => book.id),
           studentName,
           studentCode,
           totalAmount,
@@ -102,6 +126,8 @@ const HomePage = () => {
       alert(
         `Compra exitosa para el semestre ${selectedCycle}! Total de libros comprados: ${result.totalBooks}`
       )
+
+      updateStockAfterPurchase(purchasedBooks)
     } catch (err) {
       console.error(err)
       alert("Hubo un problema al realizar la compra del paquete.")
