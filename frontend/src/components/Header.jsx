@@ -1,19 +1,6 @@
-import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import { fetchTodayEarnings } from "./utils/earningsUtils"
 
-const Header = () => {
-  const [todayEarnings, setTodayEarnings] = useState(null)
-
-  useEffect(() => {
-    const getTodayEarnings = async () => {
-      const earnings = await fetchTodayEarnings()
-      setTodayEarnings(earnings)
-    }
-
-    getTodayEarnings()
-  }, [])
-
+const Header = ({ todayEarnings }) => {
   return (
     <div className="w-full h-20 bg-[#323232] flex justify-between items-center p-6">
       <div className="flex justify-center items-center gap-2">

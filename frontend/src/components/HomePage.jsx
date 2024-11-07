@@ -3,7 +3,7 @@ import Modal from "./Students/PurchaseAll"
 import CycleBooksList from "./Books/CycleBooksList"
 import SelectBooksModal from "./Books/SelectedBooksModal"
 
-const HomePage = () => {
+const HomePage = ({ refreshEarnings }) => {
   const [booksByCycle, setBooksByCycle] = useState({})
   const [error, setError] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -127,7 +127,7 @@ const HomePage = () => {
         `Compra exitosa para el semestre ${selectedCycle}! Total de libros comprados: ${result.totalBooks}`
       )
 
-      updateStockAfterPurchase(purchasedBooks)
+      await refreshEarnings()
     } catch (err) {
       console.error(err)
       alert("Hubo un problema al realizar la compra del paquete.")
