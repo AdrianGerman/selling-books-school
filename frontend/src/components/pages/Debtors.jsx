@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react"
+import PaymentModal from "../Books/PaymentModal"
 
 const DebtorsPage = () => {
   const [debtors, setDebtors] = useState([])
   const [search, setSearch] = useState("")
   const [filteredDebtors, setFilteredDebtors] = useState([])
+  const [selectedDebtor, setSelectedDebtor] = useState(null)
 
   useEffect(() => {
     fetchDebtors()
@@ -28,6 +30,10 @@ const DebtorsPage = () => {
     } catch (error) {
       console.error("Error al obtener el historial de deudores:", error)
     }
+  }
+
+  const handlePaymentSuccess = () => {
+    fetchDebtors() // Actualizar la lista de deudores después del pago
   }
 
   const handleSearchChange = (e) => {
@@ -75,7 +81,7 @@ const DebtorsPage = () => {
               index % 2 === 0 ? "bg-[#2d2d2d]" : "bg-[#3a3a3a]"
             }`}
           >
-            <div className="md:flex-row md:gap-4 flex gap-1 flex-col">
+            <div className="md:flex-row gap-4 flex items-center">
               <p className="font-bold text-xl">
                 {String(new Date(debtor.sale_date).getDate()).padStart(2, "0")}.
                 {String(new Date(debtor.sale_date).getMonth() + 1).padStart(
@@ -83,20 +89,13 @@ const DebtorsPage = () => {
                   "0"
                 )}
                 .{String(new Date(debtor.sale_date).getFullYear()).slice(-2)}
-                &nbsp;
-                {String(new Date(debtor.sale_date).getHours()).padStart(2, "0")}
-                :
-                {String(new Date(debtor.sale_date).getMinutes()).padStart(
-                  2,
-                  "0"
-                )}
               </p>
               <p>{debtor.student_name}</p>
               <p>{debtor.student_code}</p>
             </div>
             <div className="flex gap-4 items-center">
               <div className="">
-                <p>{debtor.items.length} libro/s</p>
+                <p>{debtor.items.length} libros</p>
                 <p className="text-red-500">
                   {parseFloat(debtor.remaining_balance).toLocaleString(
                     "es-MX",
@@ -107,13 +106,23 @@ const DebtorsPage = () => {
                   )}
                 </p>
               </div>
-              <button className="bg-[#613BEC] text-white text-sm p-2 rounded transform transition duration-300 hover:bg-[#4c2eb7] hover:scale-105">
+              <button
+                onClick={() => setSelectedDebtor(debtor)}
+                className="bg-[#613BEC] text-white text-sm p-2 rounded transform transition duration-300 hover:bg-[#4c2eb7] hover:scale-105"
+              >
                 Pagar
               </button>
             </div>
           </div>
         ))}
       </div>
+      {selectedDebtor && (
+        <PaymentModal
+          debtor={selectedDebtor}
+          onClose={() => setSelectedDebtor(null)}
+          onPaymentSuccess={handlePaymentSuccess}
+        />
+      )}
     </div>
   )
 }
