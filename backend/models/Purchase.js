@@ -108,6 +108,33 @@ const Purchase = {
     }))
   },
 
+  getById: async (id) => {
+    const [rows] = await pool.query(
+      `SELECT 
+        sales.id AS sale_id,
+        sales.sale_date,
+        sales.total_amount,
+        sales.amount_paid,
+        sales.remaining_balance,
+        sales.is_paid,
+        students.name AS student_name,
+        students.student_code
+      FROM sales
+      JOIN students ON sales.student_id = students.id
+      WHERE sales.id = ?`,
+      [id]
+    )
+
+    return rows[0] || null
+  },
+
+  updateBalance: async (id, remainingBalance, isPaid) => {
+    await pool.query(
+      `UPDATE sales SET remaining_balance = ?, is_paid = ? WHERE id = ?`,
+      [remainingBalance, isPaid, id]
+    )
+  },
+
   getAllByDateTime: async () => {
     const [salesRows] = await pool.query(`
       SELECT 
