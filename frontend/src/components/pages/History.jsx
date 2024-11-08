@@ -14,6 +14,7 @@ const HistoryPage = ({ refreshEarnings }) => {
       const response = await fetch("http://localhost:3000/api/purchase")
       if (!response.ok)
         throw new Error("Error al cargar el historial de compras.")
+
       let data = await response.json()
       data = data.sort((a, b) => new Date(b.sale_date) - new Date(a.sale_date))
       setPurchases(data)
@@ -21,6 +22,29 @@ const HistoryPage = ({ refreshEarnings }) => {
     } catch (error) {
       console.error("Error al obtener el historial:", error)
     }
+  }
+
+  const handleSearchChange = (e) => {
+    const searchTerm = e.target.value.toLowerCase()
+    setSearch(searchTerm)
+
+    const filtered = purchases.filter((purchase) => {
+      const saleDate = new Date(purchase.sale_date)
+      const formattedDate = `${String(saleDate.getDate()).padStart(
+        2,
+        "0"
+      )}.${String(saleDate.getMonth() + 1).padStart(2, "0")}.${String(
+        saleDate.getFullYear()
+      ).slice(-2)}`
+
+      return (
+        purchase.student_name.toLowerCase().includes(searchTerm) ||
+        purchase.student_code.toString().includes(searchTerm) ||
+        formattedDate.includes(searchTerm)
+      )
+    })
+
+    setFilteredPurchases(filtered)
   }
 
   const handleDeletePurchase = async (id) => {
@@ -73,7 +97,7 @@ const HistoryPage = ({ refreshEarnings }) => {
         <input
           type="text"
           value={search}
-          onChange={(e) => setSearch(e.target.value.toLowerCase())}
+          onChange={handleSearchChange}
           placeholder="Buscar por nombre, código o fecha"
           className="w-full p-2 rounded bg-[#2d2d2d] text-white"
         />
@@ -88,7 +112,26 @@ const HistoryPage = ({ refreshEarnings }) => {
           >
             <div className="md:flex-row md:gap-4 flex gap-1 flex-col">
               <p className="font-bold text-xl">
-                {new Date(purchase.sale_date).toLocaleDateString("es-MX")}
+                {String(new Date(purchase.sale_date).getDate()).padStart(
+                  2,
+                  "0"
+                )}
+                .
+                {String(new Date(purchase.sale_date).getMonth() + 1).padStart(
+                  2,
+                  "0"
+                )}
+                .{String(new Date(purchase.sale_date).getFullYear()).slice(-2)}
+                &nbsp;
+                {String(new Date(purchase.sale_date).getHours()).padStart(
+                  2,
+                  "0"
+                )}
+                :
+                {String(new Date(purchase.sale_date).getMinutes()).padStart(
+                  2,
+                  "0"
+                )}
               </p>
               <p>{purchase.student_name}</p>
               <p>{purchase.student_code}</p>

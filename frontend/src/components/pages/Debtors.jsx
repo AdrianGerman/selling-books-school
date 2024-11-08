@@ -16,6 +16,7 @@ const DebtorsPage = ({ refreshEarnings }) => {
       const response = await fetch("http://localhost:3000/api/purchase")
       if (!response.ok)
         throw new Error("Error al cargar el historial de deudores.")
+
       const data = await response.json()
 
       const debtorsData = data
@@ -29,6 +30,29 @@ const DebtorsPage = ({ refreshEarnings }) => {
     } catch (error) {
       console.error("Error al obtener el historial de deudores:", error)
     }
+  }
+
+  const handleSearchChange = (e) => {
+    const searchTerm = e.target.value.toLowerCase()
+    setSearch(searchTerm)
+
+    const filtered = debtors.filter((debtor) => {
+      const saleDate = new Date(debtor.sale_date)
+      const formattedDate = `${String(saleDate.getDate()).padStart(
+        2,
+        "0"
+      )}.${String(saleDate.getMonth() + 1).padStart(2, "0")}.${String(
+        saleDate.getFullYear()
+      ).slice(-2)}`
+
+      return (
+        debtor.student_name.toLowerCase().includes(searchTerm) ||
+        debtor.student_code.toString().includes(searchTerm) ||
+        formattedDate.includes(searchTerm)
+      )
+    })
+
+    setFilteredDebtors(filtered)
   }
 
   const handlePaymentSuccess = () => {
@@ -45,7 +69,7 @@ const DebtorsPage = ({ refreshEarnings }) => {
         <input
           type="text"
           value={search}
-          onChange={(e) => setSearch(e.target.value.toLowerCase())}
+          onChange={handleSearchChange}
           placeholder="Buscar por nombre, código o fecha"
           className="w-full p-2 rounded bg-[#2d2d2d] text-white"
         />
@@ -60,7 +84,12 @@ const DebtorsPage = ({ refreshEarnings }) => {
           >
             <div className="md:flex-row gap-4 flex items-center">
               <p className="font-bold text-xl">
-                {new Date(debtor.sale_date).toLocaleDateString("es-MX")}
+                {String(new Date(debtor.sale_date).getDate()).padStart(2, "0")}.
+                {String(new Date(debtor.sale_date).getMonth() + 1).padStart(
+                  2,
+                  "0"
+                )}
+                .{String(new Date(debtor.sale_date).getFullYear()).slice(-2)}
               </p>
               <p>{debtor.student_name}</p>
               <p>{debtor.student_code}</p>
