@@ -48,4 +48,9 @@ CREATE TABLE payments (
     FOREIGN KEY (sale_id) REFERENCES sales(id)
 );
 
+CREATE TABLE daily_earnings (
+  sale_date DATE PRIMARY KEY,
+  daily_earnings DECIMAL(10, 2) DEFAULT 0
+);
+
 

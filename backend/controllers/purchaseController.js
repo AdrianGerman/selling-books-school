@@ -47,6 +47,7 @@ exports.createPurchase = async (req, res) => {
       isPaid,
       formattedBooks
     )
+    await Purchase.addDailyEarnings(amountToPay)
 
     res.status(201).json({
       message: "Compra realizada con éxito",
@@ -59,21 +60,23 @@ exports.createPurchase = async (req, res) => {
   }
 }
 
-exports.getAllPurchasesByDateTime = async (req, res) => {
-  try {
-    const purchases = await Purchase.getAllByDateTime()
-    res.json(purchases)
-  } catch (error) {
-    console.error("Error al obtener las compras:", error)
-    res.status(500).json({ message: "Error interno del servidor" })
-  }
-}
-
 exports.deletePurchase = async (req, res) => {
   const { id } = req.params
   try {
+    const purchase = await Purchase.getById(id)
+    if (!purchase) {
+      return res.status(404).json({ message: "Compra no encontrada" })
+    }
+
+    const amountPaid = purchase.amount_paid
+    const saleDate = new Date(purchase.sale_date).toISOString().split("T")[0]
+
     await Purchase.deleteById(id)
-    res.status(200).json({ message: "Compra eliminada exitosamente" })
+    await Purchase.subtractDailyEarnings(amountPaid, saleDate)
+
+    res.status(200).json({
+      message: "Compra eliminada exitosamente y ganancias actualizadas"
+    })
   } catch (error) {
     console.error("Error al eliminar la compra:", error)
     res.status(500).json({ message: "Error interno del servidor" })
@@ -82,10 +85,14 @@ exports.deletePurchase = async (req, res) => {
 
 exports.deleteAllPurchases = async (req, res) => {
   try {
+    const totalSubtracted = await Purchase.resetDailyEarnings()
     await Purchase.deleteAll()
-    res
-      .status(200)
-      .json({ message: "Todas las compras han sido eliminadas exitosamente" })
+
+    res.status(200).json({
+      message:
+        "Todas las compras y ganancias diarias han sido eliminadas exitosamente",
+      totalSubtracted
+    })
   } catch (error) {
     console.error("Error al eliminar todas las compras:", error)
     res.status(500).json({ message: "Error interno del servidor" })
@@ -102,6 +109,23 @@ exports.getDailyEarnings = async (req, res) => {
   }
 }
 
+exports.getTodayEarnings = async (req, res) => {
+  try {
+    const today = new Date().toISOString().split("T")[0]
+    const [result] = await pool.query(
+      "SELECT daily_earnings FROM daily_earnings WHERE sale_date = ?",
+      [today]
+    )
+
+    res
+      .status(200)
+      .json({ daily_earnings: result.length ? result[0].daily_earnings : 0 })
+  } catch (error) {
+    console.error("Error al obtener las ganancias de hoy:", error)
+    res.status(500).json({ message: "Error al obtener las ganancias de hoy" })
+  }
+}
+
 exports.payPurchase = async (req, res) => {
   const { id } = req.params
   const { amountToPay } = req.body
@@ -112,10 +136,11 @@ exports.payPurchase = async (req, res) => {
       return res.status(404).json({ message: "Compra no encontrada" })
     }
 
-    let newRemainingBalance = purchase.remaining_balance - amountToPay
-    let isPaid = newRemainingBalance <= 0
+    const newRemainingBalance = purchase.remaining_balance - amountToPay
+    const isPaid = newRemainingBalance <= 0
 
     await Purchase.updateBalance(id, newRemainingBalance, isPaid)
+    await Purchase.addDailyEarnings(amountToPay)
 
     res.status(200).json({ message: "Pago realizado exitosamente" })
   } catch (error) {
