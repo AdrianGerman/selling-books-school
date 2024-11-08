@@ -4,6 +4,7 @@ import HomePage from "../components/pages/Home"
 import Header from "../components/layout/Header"
 import HistoryPage from "../components/pages/History"
 import EarningsPage from "../components/pages/Earnings"
+import DebtorsPage from "../components/pages/Debtors"
 
 const AppRoutes = ({ todayEarnings, refreshEarnings }) => (
   <Router>
@@ -16,6 +17,7 @@ const AppRoutes = ({ todayEarnings, refreshEarnings }) => (
       />
       <Route path="/historial" element={<HistoryPage />} />
       <Route path="/ingresos" element={<EarningsPage />} />
+      <Route path="/deudores" element={<DebtorsPage />} />
     </Routes>
   </Router>
 )

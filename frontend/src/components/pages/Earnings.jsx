@@ -14,9 +14,9 @@ const EarningsPage = () => {
   }, [])
 
   return (
-    <div className="p-6">
+    <div className="p-6 lg:w-3/4 w-auto lg:m-auto">
       <h1 className="text-2xl font-bold mb-4">Ganancias diarias</h1>
-      <div className="bg-[#323232] p-4 rounded">
+      <div>
         {earnings.map((earning, index) => (
           <div
             key={earning.sale_date}
