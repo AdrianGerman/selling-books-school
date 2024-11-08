@@ -95,7 +95,11 @@ const DebtorsPage = () => {
             </div>
             <div className="flex gap-4 items-center">
               <div className="">
-                <p>{debtor.items.length} libros</p>
+                <p>
+                  {debtor.items.length}{" "}
+                  {debtor.items.length === 1 ? "libro" : "libros"}
+                </p>
+
                 <p className="text-red-500">
                   {parseFloat(debtor.remaining_balance).toLocaleString(
                     "es-MX",

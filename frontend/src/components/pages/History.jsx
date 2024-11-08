@@ -147,8 +147,11 @@ const HistoryPage = () => {
                   {purchase.is_paid ? "Pagado" : "Deuda"}
                 </span>
               </div>
-              <div className="">
-                <p>{purchase.items.length} libros</p>
+              <div>
+                <p>
+                  {purchase.items.length}{" "}
+                  {purchase.items.length === 1 ? "libro" : "libros"}
+                </p>
                 <p>
                   {parseFloat(purchase.total_amount).toLocaleString("es-MX", {
                     style: "currency",
@@ -158,7 +161,7 @@ const HistoryPage = () => {
               </div>
               <button
                 onClick={() => handleDeletePurchase(purchase.sale_id)}
-                className="text-white px-3 py-1 rounded ml-4 transform transition duration-300 hover:scale-110 hover:text-red-700"
+                className="text-white px-3 py-1 rounded transform transition duration-300 hover:scale-110 hover:text-red-700"
               >
                 <svg
                   width="24"
