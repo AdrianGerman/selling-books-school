@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import PaymentModal from "../Books/PaymentModal"
 
-const DebtorsPage = () => {
+const DebtorsPage = ({ refreshEarnings }) => {
   const [debtors, setDebtors] = useState([])
   const [search, setSearch] = useState("")
   const [filteredDebtors, setFilteredDebtors] = useState([])
@@ -14,10 +14,9 @@ const DebtorsPage = () => {
   const fetchDebtors = async () => {
     try {
       const response = await fetch("http://localhost:3000/api/purchase")
-      if (!response.ok) {
+      if (!response.ok)
         throw new Error("Error al cargar el historial de deudores.")
-      }
-      let data = await response.json()
+      const data = await response.json()
 
       const debtorsData = data
         .filter(
@@ -33,30 +32,8 @@ const DebtorsPage = () => {
   }
 
   const handlePaymentSuccess = () => {
-    fetchDebtors() // Actualizar la lista de deudores después del pago
-  }
-
-  const handleSearchChange = (e) => {
-    const searchTerm = e.target.value.toLowerCase()
-    setSearch(searchTerm)
-
-    const filtered = debtors.filter((debtor) => {
-      const saleDate = new Date(debtor.sale_date)
-      const formattedDate = `${String(saleDate.getDate()).padStart(
-        2,
-        "0"
-      )}.${String(saleDate.getMonth() + 1).padStart(2, "0")}.${String(
-        saleDate.getFullYear()
-      ).slice(-2)}`
-
-      return (
-        debtor.student_name.toLowerCase().includes(searchTerm) ||
-        debtor.student_code.toString().includes(searchTerm) ||
-        formattedDate.includes(searchTerm)
-      )
-    })
-
-    setFilteredDebtors(filtered)
+    fetchDebtors()
+    refreshEarnings()
   }
 
   return (
@@ -68,7 +45,7 @@ const DebtorsPage = () => {
         <input
           type="text"
           value={search}
-          onChange={handleSearchChange}
+          onChange={(e) => setSearch(e.target.value.toLowerCase())}
           placeholder="Buscar por nombre, código o fecha"
           className="w-full p-2 rounded bg-[#2d2d2d] text-white"
         />
@@ -83,23 +60,17 @@ const DebtorsPage = () => {
           >
             <div className="md:flex-row gap-4 flex items-center">
               <p className="font-bold text-xl">
-                {String(new Date(debtor.sale_date).getDate()).padStart(2, "0")}.
-                {String(new Date(debtor.sale_date).getMonth() + 1).padStart(
-                  2,
-                  "0"
-                )}
-                .{String(new Date(debtor.sale_date).getFullYear()).slice(-2)}
+                {new Date(debtor.sale_date).toLocaleDateString("es-MX")}
               </p>
               <p>{debtor.student_name}</p>
               <p>{debtor.student_code}</p>
             </div>
             <div className="flex gap-4 items-center">
-              <div className="">
+              <div>
                 <p>
                   {debtor.items.length}{" "}
                   {debtor.items.length === 1 ? "libro" : "libros"}
                 </p>
-
                 <p className="text-red-500">
                   {parseFloat(debtor.remaining_balance).toLocaleString(
                     "es-MX",
@@ -125,6 +96,7 @@ const DebtorsPage = () => {
           debtor={selectedDebtor}
           onClose={() => setSelectedDebtor(null)}
           onPaymentSuccess={handlePaymentSuccess}
+          refreshEarnings={refreshEarnings}
         />
       )}
     </div>

@@ -48,7 +48,7 @@ const HomePage = ({ refreshEarnings }) => {
         const cycle = updatedBooksByCycle[selectedCycle]
         const bookToUpdate = cycle.books.find((b) => b.id === book.id)
         if (bookToUpdate) {
-          bookToUpdate.stock -= 1
+          bookToUpdate.stock -= book.quantity
         }
 
         cycle.totalStock = cycle.books.reduce(
@@ -127,6 +127,7 @@ const HomePage = ({ refreshEarnings }) => {
         `Compra exitosa para el semestre ${selectedCycle}! Total de libros comprados: ${result.totalBooks}`
       )
 
+      updateStockAfterPurchase(purchasedBooks)
       await refreshEarnings()
     } catch (err) {
       console.error(err)

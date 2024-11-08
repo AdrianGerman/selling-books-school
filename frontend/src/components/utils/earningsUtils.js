@@ -16,19 +16,16 @@ export const fetchDailyEarnings = async () => {
 
 export const fetchTodayEarnings = async () => {
   try {
-    const earnings = await fetchDailyEarnings()
-
-    const today = new Date().toLocaleDateString("en-CA")
-
-    const todayEarning = earnings.find((earning) => {
-      const saleDateFormatted = new Date(earning.sale_date).toLocaleDateString(
-        "en-CA"
-      )
-      return saleDateFormatted === today
-    })
-
-    return todayEarning ? todayEarning.daily_earnings : 0
+    const response = await fetch(
+      "http://localhost:3000/api/purchase/earnings-today"
+    )
+    if (!response.ok) {
+      throw new Error("Error al obtener las ganancias de hoy.")
+    }
+    const data = await response.json()
+    return data.daily_earnings || 0
   } catch (error) {
-    return null
+    console.error("Error al obtener las ganancias de hoy:", error)
+    return 0
   }
 }

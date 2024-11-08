@@ -1,6 +1,11 @@
 import { useState } from "react"
 
-const PaymentModal = ({ debtor, onClose, onPaymentSuccess }) => {
+const PaymentModal = ({
+  debtor,
+  onClose,
+  onPaymentSuccess,
+  refreshEarnings
+}) => {
   const [amount, setAmount] = useState("")
 
   const handlePay = async () => {
@@ -17,6 +22,7 @@ const PaymentModal = ({ debtor, onClose, onPaymentSuccess }) => {
       )
 
       if (response.ok) {
+        await refreshEarnings()
         alert("Pago realizado exitosamente.")
         onPaymentSuccess()
         onClose()

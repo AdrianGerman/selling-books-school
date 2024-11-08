@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-const HistoryPage = () => {
+const HistoryPage = ({ refreshEarnings }) => {
   const [purchases, setPurchases] = useState([])
   const [search, setSearch] = useState("")
   const [filteredPurchases, setFilteredPurchases] = useState([])
@@ -12,41 +12,15 @@ const HistoryPage = () => {
   const fetchPurchases = async () => {
     try {
       const response = await fetch("http://localhost:3000/api/purchase")
-      if (!response.ok) {
+      if (!response.ok)
         throw new Error("Error al cargar el historial de compras.")
-      }
       let data = await response.json()
-
       data = data.sort((a, b) => new Date(b.sale_date) - new Date(a.sale_date))
-
       setPurchases(data)
       setFilteredPurchases(data)
     } catch (error) {
       console.error("Error al obtener el historial:", error)
     }
-  }
-
-  const handleSearchChange = (e) => {
-    const searchTerm = e.target.value.toLowerCase()
-    setSearch(searchTerm)
-
-    const filtered = purchases.filter((purchase) => {
-      const saleDate = new Date(purchase.sale_date)
-      const formattedDate = `${String(saleDate.getDate()).padStart(
-        2,
-        "0"
-      )}.${String(saleDate.getMonth() + 1).padStart(2, "0")}.${String(
-        saleDate.getFullYear()
-      ).slice(-2)}`
-
-      return (
-        purchase.student_name.toLowerCase().includes(searchTerm) ||
-        purchase.student_code.toString().includes(searchTerm) ||
-        formattedDate.includes(searchTerm)
-      )
-    })
-
-    setFilteredPurchases(filtered)
   }
 
   const handleDeletePurchase = async (id) => {
@@ -60,6 +34,7 @@ const HistoryPage = () => {
         method: "DELETE"
       })
       fetchPurchases()
+      refreshEarnings()
     } catch (error) {
       console.error("Error al eliminar la compra:", error)
     }
@@ -67,17 +42,17 @@ const HistoryPage = () => {
 
   const handleDeleteAllPurchases = async () => {
     if (
-      window.confirm("¿Estás seguro de que quieres borrar todo el historial?")
-    ) {
-      try {
-        await fetch("http://localhost:3000/api/purchase", {
-          method: "DELETE"
-        })
-        setPurchases([])
-        setFilteredPurchases([])
-      } catch (error) {
-        console.error("Error al eliminar todo el historial:", error)
-      }
+      !window.confirm("¿Estás seguro de que quieres borrar todo el historial?")
+    )
+      return
+
+    try {
+      await fetch("http://localhost:3000/api/purchase", { method: "DELETE" })
+      setPurchases([])
+      setFilteredPurchases([])
+      refreshEarnings()
+    } catch (error) {
+      console.error("Error al eliminar todo el historial:", error)
     }
   }
 
@@ -98,7 +73,7 @@ const HistoryPage = () => {
         <input
           type="text"
           value={search}
-          onChange={handleSearchChange}
+          onChange={(e) => setSearch(e.target.value.toLowerCase())}
           placeholder="Buscar por nombre, código o fecha"
           className="w-full p-2 rounded bg-[#2d2d2d] text-white"
         />
@@ -113,26 +88,7 @@ const HistoryPage = () => {
           >
             <div className="md:flex-row md:gap-4 flex gap-1 flex-col">
               <p className="font-bold text-xl">
-                {String(new Date(purchase.sale_date).getDate()).padStart(
-                  2,
-                  "0"
-                )}
-                .
-                {String(new Date(purchase.sale_date).getMonth() + 1).padStart(
-                  2,
-                  "0"
-                )}
-                .{String(new Date(purchase.sale_date).getFullYear()).slice(-2)}
-                &nbsp;
-                {String(new Date(purchase.sale_date).getHours()).padStart(
-                  2,
-                  "0"
-                )}
-                :
-                {String(new Date(purchase.sale_date).getMinutes()).padStart(
-                  2,
-                  "0"
-                )}
+                {new Date(purchase.sale_date).toLocaleDateString("es-MX")}
               </p>
               <p>{purchase.student_name}</p>
               <p>{purchase.student_code}</p>
