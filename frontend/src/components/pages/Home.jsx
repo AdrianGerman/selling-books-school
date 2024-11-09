@@ -11,6 +11,7 @@ const HomePage = ({ refreshEarnings }) => {
   const [selectedCycle, setSelectedCycle] = useState(null)
   const [selectedBooks, setSelectedBooks] = useState([])
   const [totalAmount, setTotalAmount] = useState(0)
+  const [totalStock, setTotalStock] = useState(0)
 
   useEffect(() => {
     const loadBooks = async () => {
@@ -31,6 +32,9 @@ const HomePage = ({ refreshEarnings }) => {
         }, {})
 
         setBooksByCycle(groupedBooks)
+
+        const overallStock = books.reduce((sum, book) => sum + book.stock, 0)
+        setTotalStock(overallStock)
       } catch (err) {
         setError("Error al cargar los libros.")
         console.error(err)
@@ -56,6 +60,12 @@ const HomePage = ({ refreshEarnings }) => {
           0
         )
       })
+
+      const newTotalStock = Object.values(updatedBooksByCycle).reduce(
+        (sum, cycle) => sum + cycle.totalStock,
+        0
+      )
+      setTotalStock(newTotalStock)
 
       return updatedBooksByCycle
     })
@@ -143,7 +153,12 @@ const HomePage = ({ refreshEarnings }) => {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center my-6 p-4">
+    <div className="flex flex-col justify-center items-end p-4">
+      <div className="mb-4 p-4 bg-gray-700 rounded shadow-md">
+        <p className="text-md font-semibold">
+          Total de libros en stock: {totalStock}
+        </p>
+      </div>
       {Object.keys(booksByCycle).map((cycle) => (
         <BooksList
           key={cycle}
