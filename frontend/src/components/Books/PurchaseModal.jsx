@@ -92,8 +92,12 @@ const PurchaseModal = ({ onClose, onConfirm, totalAmount }) => {
           <label className="block">Monto a pagar ahora:</label>
           <input
             type="number"
-            value={amountToPay}
-            onChange={(e) => setAmountToPay(parseFloat(e.target.value))}
+            value={amountToPay || ""}
+            onChange={(e) =>
+              setAmountToPay(
+                e.target.value === "" ? 0 : parseFloat(e.target.value)
+              )
+            }
             className="w-full p-2 border rounded mt-1"
             placeholder="Monto a pagar"
           />

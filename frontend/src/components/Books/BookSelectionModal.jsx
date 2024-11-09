@@ -68,7 +68,12 @@ const BookSelectionModal = ({ books, onClose, onConfirmSelection }) => {
           </button>
           <button
             onClick={handleNext}
-            className="transform transition duration-300 bg-[#613BEC] hover:bg-[#4c2eb7] hover:scale-105 text-white p-2 rounded"
+            disabled={selectedBooks.length === 0}
+            className={`transform transition duration-300 p-2 rounded text-white ${
+              selectedBooks.length > 0
+                ? "bg-[#613BEC] hover:bg-[#4c2eb7] hover:scale-105"
+                : "bg-gray-600 cursor-not-allowed"
+            }`}
           >
             Siguiente
           </button>
