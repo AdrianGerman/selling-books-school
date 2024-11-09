@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import PaymentModal from "../Books/PaymentModal"
+import PaymentModal from "../Modal/Payment"
 
 const DebtorsPage = ({ refreshEarnings }) => {
   const [debtors, setDebtors] = useState([])

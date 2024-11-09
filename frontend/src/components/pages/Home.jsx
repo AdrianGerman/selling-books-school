@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
-import PurchaseModal from "../Books/PurchaseModal"
-import BooksList from "../Books/BooksList"
-import BookSelectionModal from "../Books/BookSelectionModal"
+import PurchaseModal from "../Modal/Purchase"
+import BooksList from "../layout/BooksList"
+import BookSelectionModal from "../Modal/BookSelection"
 
 const HomePage = ({ refreshEarnings }) => {
   const [booksByCycle, setBooksByCycle] = useState({})
