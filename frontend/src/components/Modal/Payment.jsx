@@ -9,6 +9,11 @@ const PaymentModal = ({
   const [amount, setAmount] = useState("")
 
   const handlePay = async () => {
+    if (parseFloat(amount) <= 0 || isNaN(parseFloat(amount))) {
+      alert("Por favor, ingresa un monto válido mayor a 0.")
+      return
+    }
+
     try {
       const response = await fetch(
         `http://localhost:3000/api/purchase/${debtor.sale_id}/pay`,
@@ -72,7 +77,12 @@ const PaymentModal = ({
           </button>
           <button
             onClick={handlePay}
-            className="transform transition duration-300 bg-[#613BEC] hover:bg-[#4c2eb7] hover:scale-105 text-white p-2 rounded"
+            disabled={parseFloat(amount) <= 0 || isNaN(parseFloat(amount))}
+            className={`transform transition duration-300 p-2 rounded text-white ${
+              parseFloat(amount) > 0
+                ? "bg-[#613BEC] hover:bg-[#4c2eb7] hover:scale-105"
+                : "bg-gray-600 cursor-not-allowed"
+            }`}
           >
             Confirmar pago
           </button>
