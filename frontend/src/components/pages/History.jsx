@@ -5,7 +5,6 @@ const HistoryPage = ({ refreshEarnings }) => {
   const [search, setSearch] = useState("")
   const [filteredPurchases, setFilteredPurchases] = useState([])
   const [totalBooksSold, setTotalBooksSold] = useState(0)
-  const [totalDebt, setTotalDebt] = useState(0)
 
   useEffect(() => {
     fetchPurchases()
@@ -32,11 +31,6 @@ const HistoryPage = ({ refreshEarnings }) => {
       return total + purchase.items.length
     }, 0)
     setTotalBooksSold(booksSold)
-
-    const debt = purchases.reduce((total, purchase) => {
-      return total + (parseFloat(purchase.remaining_balance) || 0)
-    }, 0)
-    setTotalDebt(debt)
   }
 
   const handleSearchChange = (e) => {
@@ -91,7 +85,6 @@ const HistoryPage = ({ refreshEarnings }) => {
       setFilteredPurchases([])
       refreshEarnings()
       setTotalBooksSold(0)
-      setTotalDebt(0)
     } catch (error) {
       console.error("Error al eliminar todo el historial:", error)
     }
@@ -121,16 +114,9 @@ const HistoryPage = ({ refreshEarnings }) => {
         />
       </div>
 
-      <div className="mb-4 p-4 bg-gray-700 rounded">
-        <p className="text-lg font-semibold">
-          Total de libros vendidos: {totalBooksSold}
-        </p>
-        <p className="text-lg font-semibold">
-          Total de deuda general:{" "}
-          {totalDebt.toLocaleString("es-MX", {
-            style: "currency",
-            currency: "MXN"
-          })}
+      <div className="flex justify-between items-end mb-4 p-4 rounded bg-gray-700">
+        <p className="text-lg">
+          Total de libros vendidos: <strong>{totalBooksSold}</strong>
         </p>
       </div>
 

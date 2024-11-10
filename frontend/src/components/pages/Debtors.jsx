@@ -6,6 +6,7 @@ const DebtorsPage = ({ refreshEarnings }) => {
   const [search, setSearch] = useState("")
   const [filteredDebtors, setFilteredDebtors] = useState([])
   const [selectedDebtor, setSelectedDebtor] = useState(null)
+  const [totalDebt, setTotalDebt] = useState(0)
 
   useEffect(() => {
     fetchDebtors()
@@ -27,9 +28,17 @@ const DebtorsPage = ({ refreshEarnings }) => {
 
       setDebtors(debtorsData)
       setFilteredDebtors(debtorsData)
+      calculateTotalDebt(debtorsData)
     } catch (error) {
       console.error("Error al obtener el historial de deudores:", error)
     }
+  }
+
+  const calculateTotalDebt = (debtorsData) => {
+    const debt = debtorsData.reduce((total, debtor) => {
+      return total + (parseFloat(debtor.remaining_balance) || 0)
+    }, 0)
+    setTotalDebt(debt)
   }
 
   const handleSearchChange = (e) => {
@@ -73,6 +82,17 @@ const DebtorsPage = ({ refreshEarnings }) => {
           placeholder="Buscar por nombre, código o fecha"
           className="w-full p-2 rounded bg-[#2d2d2d] text-white"
         />
+      </div>
+      <div className="flex justify-between items-end mb-4 p-4 bg-gray-700 rounded">
+        <p className="text-lg">
+          Total de deuda general:{" "}
+          <strong>
+            {totalDebt.toLocaleString("es-MX", {
+              style: "currency",
+              currency: "MXN"
+            })}
+          </strong>
+        </p>
       </div>
       <div>
         {filteredDebtors.map((debtor, index) => (

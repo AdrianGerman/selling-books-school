@@ -14,7 +14,7 @@ const Header = ({ todayEarnings }) => {
           className="transform transition duration-300 hover:scale-105"
           to="/deudores"
         >
-          DEUDORES
+          Deudores
         </Link>
         <Link
           className="transform transition duration-300 hover:scale-105"
