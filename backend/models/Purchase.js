@@ -183,14 +183,14 @@ const Purchase = {
   getDailyEarnings: async () => {
     const [rows] = await pool.query(`
       SELECT 
-        DATE(sales.sale_date) AS sale_date,
-        SUM(daily_earnings) AS daily_earnings,
-        SUM(sale_items.quantity) AS books_sold
-      FROM sales
-      JOIN sale_items ON sales.id = sale_items.sale_id
-      JOIN daily_earnings ON DATE(sales.sale_date) = daily_earnings.sale_date
-      GROUP BY DATE(sales.sale_date)
-      ORDER BY sale_date DESC
+        daily_earnings.sale_date,
+        daily_earnings.daily_earnings,
+        COALESCE(SUM(sale_items.quantity), 0) AS books_sold
+      FROM daily_earnings
+      LEFT JOIN sales ON DATE(sales.sale_date) = daily_earnings.sale_date
+      LEFT JOIN sale_items ON sales.id = sale_items.sale_id
+      GROUP BY daily_earnings.sale_date, daily_earnings.daily_earnings
+      ORDER BY daily_earnings.sale_date DESC
     `)
 
     return rows
