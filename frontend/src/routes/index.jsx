@@ -6,6 +6,7 @@ import HistoryPage from "../components/pages/History"
 import EarningsPage from "../components/pages/Earnings"
 import DebtorsPage from "../components/pages/Debtors"
 import useEarnings from "../hooks/useEarnings"
+import Footer from "../components/layout/Footer"
 
 const AppRoutes = () => {
   const { todayEarnings, refreshTodayEarnings } = useEarnings()
@@ -29,6 +30,7 @@ const AppRoutes = () => {
           element={<DebtorsPage refreshEarnings={refreshTodayEarnings} />}
         />
       </Routes>
+      <Footer />
     </Router>
   )
 }
