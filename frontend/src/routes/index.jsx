@@ -5,9 +5,9 @@ import Header from "../components/layout/Header"
 import HistoryPage from "../components/pages/History"
 import EarningsPage from "../components/pages/Earnings"
 import DebtorsPage from "../components/pages/Debtors"
-import useEarnings from "../hooks/useEarnings"
 import Footer from "../components/layout/Footer"
-import AdminPage from "../components/pages/Admin"
+import useEarnings from "../hooks/useEarnings"
+import adminRoutes from "./admin"
 
 const AppRoutes = () => {
   const { todayEarnings, refreshTodayEarnings } = useEarnings()
@@ -32,10 +32,7 @@ const AppRoutes = () => {
               path="/deudores"
               element={<DebtorsPage refreshEarnings={refreshTodayEarnings} />}
             />
-            <Route
-              path="/admin"
-              element={<AdminPage refreshEarnings={refreshTodayEarnings} />}
-            />
+            {adminRoutes}
           </Routes>
         </main>
         <Footer />
