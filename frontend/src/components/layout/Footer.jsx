@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 const Footer = () => {
   return (
     <>
-      <div className="text-center font-bold mb-6">
+      <div className="text-center font-bold mb-6 mt-6">
         <section>
           <h1>
             Designed with ♥ by AdrianGerman ·{" "}
