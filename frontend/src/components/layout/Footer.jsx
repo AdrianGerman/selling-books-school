@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 const Footer = () => {
   return (
     <>
-      <div className="p-4 text-center font-bold my-7">
+      <div className="text-center font-bold mb-6">
         <section>
           <h1>
             Designed with ♥ by AdrianGerman ·{" "}

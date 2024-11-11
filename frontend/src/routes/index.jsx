@@ -15,10 +15,8 @@ const AppRoutes = () => {
   return (
     <Router>
       <div className="flex flex-col min-h-screen">
-        {" "}
         <Header todayEarnings={todayEarnings} />
-        <div className="flex-grow">
-          {" "}
+        <main className="flex-grow">
           <Routes>
             <Route path="/login" element={<AuthComponent />} />
             <Route
@@ -39,7 +37,7 @@ const AppRoutes = () => {
               element={<AdminPage refreshEarnings={refreshTodayEarnings} />}
             />
           </Routes>
-        </div>
+        </main>
         <Footer />
       </div>
     </Router>
