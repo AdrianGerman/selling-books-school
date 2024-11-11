@@ -7,30 +7,41 @@ import EarningsPage from "../components/pages/Earnings"
 import DebtorsPage from "../components/pages/Debtors"
 import useEarnings from "../hooks/useEarnings"
 import Footer from "../components/layout/Footer"
+import AdminPage from "../components/pages/Admin"
 
 const AppRoutes = () => {
   const { todayEarnings, refreshTodayEarnings } = useEarnings()
 
   return (
     <Router>
-      <Header todayEarnings={todayEarnings} />
-      <Routes>
-        <Route path="/login" element={<AuthComponent />} />
-        <Route
-          path="/"
-          element={<HomePage refreshEarnings={refreshTodayEarnings} />}
-        />
-        <Route
-          path="/historial"
-          element={<HistoryPage refreshEarnings={refreshTodayEarnings} />}
-        />
-        <Route path="/ingresos" element={<EarningsPage />} />
-        <Route
-          path="/deudores"
-          element={<DebtorsPage refreshEarnings={refreshTodayEarnings} />}
-        />
-      </Routes>
-      <Footer />
+      <div className="flex flex-col min-h-screen">
+        {" "}
+        <Header todayEarnings={todayEarnings} />
+        <div className="flex-grow">
+          {" "}
+          <Routes>
+            <Route path="/login" element={<AuthComponent />} />
+            <Route
+              path="/"
+              element={<HomePage refreshEarnings={refreshTodayEarnings} />}
+            />
+            <Route
+              path="/historial"
+              element={<HistoryPage refreshEarnings={refreshTodayEarnings} />}
+            />
+            <Route path="/ingresos" element={<EarningsPage />} />
+            <Route
+              path="/deudores"
+              element={<DebtorsPage refreshEarnings={refreshTodayEarnings} />}
+            />
+            <Route
+              path="/admin"
+              element={<AdminPage refreshEarnings={refreshTodayEarnings} />}
+            />
+          </Routes>
+        </div>
+        <Footer />
+      </div>
     </Router>
   )
 }
