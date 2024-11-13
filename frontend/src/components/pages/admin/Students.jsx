@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react"
+import AddStudentForm from "./Modal/AddStudent"
 
 const Students = () => {
   const [students, setStudents] = useState([])
   const [search, setSearch] = useState("")
   const [filteredStudents, setFilteredStudents] = useState([])
+  const [isAdding, setIsAdding] = useState(false)
 
   useEffect(() => {
     fetchStudents()
@@ -57,8 +59,9 @@ const Students = () => {
     alert(`Función de edición para: ${student.name}`)
   }
 
-  const handleAddStudent = () => {
-    alert("Función de agregar estudiante")
+  const handleAddStudent = (newStudent) => {
+    setStudents((prev) => [...prev, newStudent])
+    setFilteredStudents((prev) => [...prev, newStudent])
   }
 
   return (
@@ -66,10 +69,10 @@ const Students = () => {
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Lista de Estudiantes</h1>
         <button
-          onClick={handleAddStudent}
-          className="bg-green-500 text-white px-4 py-2 rounded transform transition duration-300 hover:bg-green-600"
+          onClick={() => setIsAdding(true)}
+          className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
         >
-          Agregar Estudiante
+          Agregar estudiante
         </button>
       </div>
 
@@ -127,6 +130,13 @@ const Students = () => {
           </div>
         ))}
       </div>
+
+      {isAdding && (
+        <AddStudentForm
+          onClose={() => setIsAdding(false)}
+          onAddStudent={handleAddStudent}
+        />
+      )}
     </div>
   )
 }
