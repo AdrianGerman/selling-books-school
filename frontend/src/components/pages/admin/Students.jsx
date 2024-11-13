@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react"
-import AddStudentForm from "./Modal/AddStudent"
+import AddStudentModal from "./Modal/AddStudent"
+import EditStudentModal from "./Modal/EditStudent"
 
 const Students = () => {
   const [students, setStudents] = useState([])
   const [search, setSearch] = useState("")
   const [filteredStudents, setFilteredStudents] = useState([])
   const [isAdding, setIsAdding] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
+  const [studentToEdit, setStudentToEdit] = useState(null)
 
   useEffect(() => {
     fetchStudents()
@@ -56,7 +59,21 @@ const Students = () => {
   }
 
   const handleEditStudent = (student) => {
-    alert(`Función de edición para: ${student.name}`)
+    setStudentToEdit(student)
+    setIsEditing(true)
+  }
+
+  const handleUpdateStudent = (updatedStudent) => {
+    setStudents((prev) =>
+      prev.map((student) =>
+        student.id === updatedStudent.id ? updatedStudent : student
+      )
+    )
+    setFilteredStudents((prev) =>
+      prev.map((student) =>
+        student.id === updatedStudent.id ? updatedStudent : student
+      )
+    )
   }
 
   const handleAddStudent = (newStudent) => {
@@ -132,9 +149,17 @@ const Students = () => {
       </div>
 
       {isAdding && (
-        <AddStudentForm
+        <AddStudentModal
           onClose={() => setIsAdding(false)}
           onAddStudent={handleAddStudent}
+        />
+      )}
+
+      {isEditing && studentToEdit && (
+        <EditStudentModal
+          student={studentToEdit}
+          onClose={() => setIsEditing(false)}
+          onUpdateStudent={handleUpdateStudent}
         />
       )}
     </div>

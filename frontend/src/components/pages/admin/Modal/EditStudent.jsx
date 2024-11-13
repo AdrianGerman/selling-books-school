@@ -1,8 +1,8 @@
 import { useState } from "react"
 
-const AddStudentModal = ({ onClose, onAddStudent }) => {
-  const [name, setName] = useState("")
-  const [studentCode, setStudentCode] = useState("")
+const EditStudentModal = ({ student, onClose, onUpdateStudent }) => {
+  const [name, setName] = useState(student.name)
+  const [studentCode, setStudentCode] = useState(student.student_code)
   const [error, setError] = useState("")
 
   const handleSubmit = async (e) => {
@@ -14,24 +14,27 @@ const AddStudentModal = ({ onClose, onAddStudent }) => {
     }
 
     try {
-      const response = await fetch("http://localhost:3000/api/students", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ name, student_code: studentCode })
-      })
+      const response = await fetch(
+        `http://localhost:3000/api/students/${student.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ name, student_code: studentCode })
+        }
+      )
 
       if (!response.ok) {
-        throw new Error("Error al agregar el estudiante.")
+        throw new Error("Error al actualizar el estudiante.")
       }
 
-      const newStudent = await response.json()
-      onAddStudent(newStudent)
+      const updatedStudent = await response.json()
+      onUpdateStudent(updatedStudent)
       onClose()
     } catch (error) {
-      console.error("Error al agregar el estudiante:", error)
-      setError("Hubo un problema al agregar el estudiante.")
+      console.error("Error al actualizar el estudiante:", error)
+      setError("Hubo un problema al actualizar el estudiante.")
     }
   }
 
@@ -39,7 +42,7 @@ const AddStudentModal = ({ onClose, onAddStudent }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-[#323232] p-6 rounded shadow-md w-80">
         <h2 className="text-xl font-semibold mb-4 text-center">
-          Agregar Estudiante
+          Editar Estudiante
         </h2>
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
         <form onSubmit={handleSubmit}>
@@ -75,7 +78,7 @@ const AddStudentModal = ({ onClose, onAddStudent }) => {
               type="submit"
               className="transform transition duration-300 bg-[#613BEC] hover:bg-[#4c2eb7] hover:scale-105 p-2 rounded"
             >
-              Agregar
+              Guardar
             </button>
           </div>
         </form>
@@ -84,4 +87,4 @@ const AddStudentModal = ({ onClose, onAddStudent }) => {
   )
 }
 
-export default AddStudentModal
+export default EditStudentModal
