@@ -13,6 +13,11 @@ const AddStudentModal = ({ onClose, onAddStudent }) => {
       return
     }
 
+    if (studentCode.length < 9) {
+      setError("El código de estudiante debe tener al menos 9 caracteres.")
+      return
+    }
+
     try {
       const response = await fetch("http://localhost:3000/api/students", {
         method: "POST",
