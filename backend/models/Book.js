@@ -11,12 +11,12 @@ const Book = {
     return rows[0]
   },
 
-  create: async (title, subject, price, stock, cycle) => {
+  create: async (title, price, stock, cycle) => {
     const [result] = await pool.query(
-      "INSERT INTO books (title, subject, price, stock, cycle) VALUES (?, ?, ?, ?, ?)",
-      [title, subject, price, stock, cycle]
+      "INSERT INTO books (title, price, stock, cycle) VALUES (?, ?, ?, ?)",
+      [title, price, stock, cycle]
     )
-    return { id: result.insertId, title, subject, price, stock, cycle }
+    return { id: result.insertId, title, price, stock, cycle }
   },
 
   update: async (id, fieldsToUpdate) => {

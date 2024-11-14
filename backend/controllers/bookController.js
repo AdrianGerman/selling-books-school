@@ -26,9 +26,9 @@ exports.getBookById = async (req, res) => {
 }
 
 exports.createBook = async (req, res) => {
-  const { title, subject, price, stock, cycle } = req.body
+  const { title, price, stock, cycle } = req.body
   try {
-    const newBook = await Book.create(title, subject, price, stock, cycle)
+    const newBook = await Book.create(title, price, stock, cycle)
     res.status(201).json(newBook)
   } catch (error) {
     console.error("Error al crear el libro:", error)
@@ -41,7 +41,6 @@ exports.updateBook = async (req, res) => {
   const fieldsToUpdate = {}
 
   if (req.body.title !== undefined) fieldsToUpdate.title = req.body.title
-  if (req.body.subject !== undefined) fieldsToUpdate.subject = req.body.subject
   if (req.body.price !== undefined) fieldsToUpdate.price = req.body.price
   if (req.body.stock !== undefined) fieldsToUpdate.stock = req.body.stock
   if (req.body.cycle !== undefined) fieldsToUpdate.cycle = req.body.cycle
