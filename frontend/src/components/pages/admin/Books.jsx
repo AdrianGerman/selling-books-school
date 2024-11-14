@@ -59,6 +59,14 @@ const Books = () => {
     }))
   }
 
+  const existingTitlesByCycle = Object.keys(booksByCycle).reduce(
+    (acc, cycle) => {
+      acc[cycle] = booksByCycle[cycle].map((book) => book.title.toLowerCase())
+      return acc
+    },
+    {}
+  )
+
   return (
     <div className="p-6 lg:w-3/4 w-auto lg:m-auto">
       <div className="flex justify-between items-center mb-4">
@@ -86,9 +94,6 @@ const Books = () => {
                 >
                   <div>
                     <p className="font-bold">{book.title}</p>
-                    <p className="text-sm text-gray-400">
-                      Materia: {book.subject}
-                    </p>
                     <p className="text-sm text-gray-400">
                       Precio:{" "}
                       {parseFloat(book.price).toLocaleString("es-MX", {
@@ -135,6 +140,7 @@ const Books = () => {
         <AddBookModal
           onClose={() => setIsAdding(false)}
           onAddBook={handleAddBook}
+          existingTitlesByCycle={existingTitlesByCycle}
         />
       )}
     </div>

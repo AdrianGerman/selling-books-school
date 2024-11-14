@@ -1,8 +1,7 @@
 import { useState } from "react"
 
-const AddBookModal = ({ onClose, onAddBook }) => {
+const AddBookModal = ({ onClose, onAddBook, existingTitlesByCycle }) => {
   const [title, setTitle] = useState("")
-  const [subject, setSubject] = useState("")
   const [price, setPrice] = useState("")
   const [stock, setStock] = useState("")
   const [cycle, setCycle] = useState("")
@@ -11,8 +10,14 @@ const AddBookModal = ({ onClose, onAddBook }) => {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    if (!title || !subject || !price || !stock || !cycle) {
+    if (!title || !price || !stock || !cycle) {
       setError("Todos los campos son obligatorios.")
+      return
+    }
+
+    const existingTitlesInCycle = existingTitlesByCycle[cycle] || []
+    if (existingTitlesInCycle.includes(title.toLowerCase())) {
+      setError("Ya existe un libro con ese título en este semestre.")
       return
     }
 
@@ -24,7 +29,6 @@ const AddBookModal = ({ onClose, onAddBook }) => {
         },
         body: JSON.stringify({
           title,
-          subject,
           price: parseFloat(price),
           stock: parseInt(stock),
           cycle: parseInt(cycle)
@@ -60,16 +64,6 @@ const AddBookModal = ({ onClose, onAddBook }) => {
               onChange={(e) => setTitle(e.target.value)}
               className="w-full p-2 border rounded bg-black text-white"
               placeholder="Título del libro"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-white">Materia:</label>
-            <input
-              type="text"
-              value={subject}
-              onChange={(e) => setSubject(e.target.value)}
-              className="w-full p-2 border rounded bg-black text-white"
-              placeholder="Materia"
             />
           </div>
           <div className="mb-4">
