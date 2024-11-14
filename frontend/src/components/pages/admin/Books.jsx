@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react"
+import AddBookModal from "./Modal/AddBook"
 
 const Books = () => {
   const [booksByCycle, setBooksByCycle] = useState({})
+  const [isAdding, setIsAdding] = useState(false)
 
   useEffect(() => {
     fetchBooks()
@@ -50,11 +52,21 @@ const Books = () => {
     }
   }
 
+  const handleAddBook = (newBook) => {
+    setBooksByCycle((prev) => ({
+      ...prev,
+      [newBook.cycle]: [...(prev[newBook.cycle] || []), newBook]
+    }))
+  }
+
   return (
     <div className="p-6 lg:w-3/4 w-auto lg:m-auto">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Lista de Libros</h1>
-        <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+        <button
+          onClick={() => setIsAdding(true)}
+          className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+        >
           Agregar libro
         </button>
       </div>
@@ -118,6 +130,13 @@ const Books = () => {
             </div>
           </div>
         ))}
+
+      {isAdding && (
+        <AddBookModal
+          onClose={() => setIsAdding(false)}
+          onAddBook={handleAddBook}
+        />
+      )}
     </div>
   )
 }
