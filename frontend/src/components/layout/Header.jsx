@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom"
+import libraryIcon from "../../assets/library.svg"
 
 const Header = ({ todayEarnings }) => {
   return (
     <div className="w-full h-20 bg-[#323232] flex justify-between items-center p-6">
       <div className="flex justify-center items-center gap-2">
-        <img src="./library.svg" alt="library icon" className="w-10 h-10" />
+        <img src={libraryIcon} alt="library icon" className="w-10 h-10" />
         <Link to={"/"}>
           <h1 className="text-4xl font-bold">SellBooks</h1>
         </Link>
