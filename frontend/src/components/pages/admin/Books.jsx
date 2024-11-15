@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react"
 import AddBookModal from "./Modal/AddBook"
+import EditBookModal from "./Modal/EditBook"
 
 const Books = () => {
   const [booksByCycle, setBooksByCycle] = useState({})
   const [isAdding, setIsAdding] = useState(false)
+  const [selectedBook, setSelectedBook] = useState(null)
 
   useEffect(() => {
     fetchBooks()
@@ -32,8 +34,17 @@ const Books = () => {
     }
   }
 
-  const handleEditBook = (book) => {
-    alert(`Editar libro: ${book.title}`)
+  const handleEditBookClick = (book) => {
+    setSelectedBook(book)
+  }
+
+  const handleEditBook = (updatedBook) => {
+    setBooksByCycle((prev) => ({
+      ...prev,
+      [updatedBook.cycle]: prev[updatedBook.cycle].map((book) =>
+        book.id === updatedBook.id ? updatedBook : book
+      )
+    }))
   }
 
   const handleDeleteBook = async (id) => {
@@ -105,7 +116,7 @@ const Books = () => {
                   </div>
                   <div className="flex gap-2">
                     <button
-                      onClick={() => handleEditBook(book)}
+                      onClick={() => handleEditBookClick(book)}
                       className="bg-[#613BEC] text-white text-sm p-2 rounded transform transition duration-300 hover:bg-[#4c2eb7] hover:scale-105"
                     >
                       Editar
@@ -140,6 +151,15 @@ const Books = () => {
         <AddBookModal
           onClose={() => setIsAdding(false)}
           onAddBook={handleAddBook}
+          existingTitlesByCycle={existingTitlesByCycle}
+        />
+      )}
+
+      {selectedBook && (
+        <EditBookModal
+          book={selectedBook}
+          onClose={() => setSelectedBook(null)}
+          onEditBook={handleEditBook}
           existingTitlesByCycle={existingTitlesByCycle}
         />
       )}
