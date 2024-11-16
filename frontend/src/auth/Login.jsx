@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { loginUser } from "./authService"
 
@@ -8,11 +8,19 @@ const AuthComponent = () => {
   const [error, setError] = useState("")
   const navigate = useNavigate()
 
+  useEffect(() => {
+    const token = localStorage.getItem("token")
+    if (token) {
+      navigate("/")
+    }
+  }, [navigate])
+
   const handleLogin = async (e) => {
     e.preventDefault()
     try {
-      const token = await loginUser(username, password)
+      const { token, role } = await loginUser(username, password)
       localStorage.setItem("token", token)
+      localStorage.setItem("role", role)
       setError("")
       navigate("/")
     } catch (err) {
@@ -21,7 +29,7 @@ const AuthComponent = () => {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-900">
+    <div className="flex items-center justify-center min-h-screen mb-[-20rem] bg-gray-900">
       <div className="w-full max-w-md p-8 space-y-6 bg-gray-800 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold text-center text-white">
           Iniciar Sesión
