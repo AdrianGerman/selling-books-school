@@ -1,6 +1,5 @@
 const API_URL = import.meta.env.VITE_API_URL
 
-// funcíón para registar nuevos usuarios
 export const registerUser = async (username, password, role) => {
   try {
     const response = await fetch(`${API_URL}/users/register`, {
@@ -39,7 +38,7 @@ export const loginUser = async (username, password) => {
     }
 
     const data = await response.json()
-    return data.token // Devuelve el token JWT
+    return { token: data.token, role: data.role }
   } catch (error) {
     console.error("Error al iniciar sesión", error)
     throw error
