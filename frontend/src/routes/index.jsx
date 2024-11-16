@@ -5,6 +5,7 @@ import {
   useLocation
 } from "react-router-dom"
 import ProtectedRoute from "../auth/ProtectedRoute"
+import PublicRoute from "../auth/PublicRoute"
 import AuthComponent from "../auth/Login"
 import HomePage from "../components/pages/Home"
 import HistoryPage from "../components/pages/History"
@@ -12,9 +13,8 @@ import EarningsPage from "../components/pages/Earnings"
 import DebtorsPage from "../components/pages/Debtors"
 import Footer from "../components/layout/Footer"
 import Header from "../components/layout/Header"
-import adminRoutes from "./admin"
+import AdminRoutes from "./admin"
 import useEarnings from "../hooks/useEarnings"
-import PublicRoute from "../auth/PublicRoute"
 
 const AppRoutes = () => {
   const { todayEarnings, refreshTodayEarnings } = useEarnings()
@@ -35,6 +35,7 @@ const AppRoutes = () => {
               </PublicRoute>
             }
           />
+
           <Route
             path="/"
             element={
@@ -67,9 +68,14 @@ const AppRoutes = () => {
               </ProtectedRoute>
             }
           />
+
           <Route
             path="/*"
-            element={<ProtectedRoute>{adminRoutes}</ProtectedRoute>}
+            element={
+              <ProtectedRoute>
+                <AdminRoutes />
+              </ProtectedRoute>
+            }
           />
         </Routes>
       </main>
