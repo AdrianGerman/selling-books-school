@@ -1,6 +1,6 @@
 const BooksList = ({ cycle, books, onBuyPackage, onSelectBooks }) => {
   return (
-    <div className="mb-6 bg-[#323232] p-4 rounded">
+    <div className="mb-6 bg-[#323232] p-4 rounded w-full">
       <div className="flex justify-between">
         <h2 className="text-xl font-semibold mb-4">Semestre {cycle}</h2>
         <h2 className="font-semibold mb-4">{books.totalStock || 0} unidades</h2>
