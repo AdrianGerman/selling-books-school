@@ -1,3 +1,4 @@
+import { BrowserRouter as Router } from "react-router-dom"
 import useEarnings from "./hooks/useEarnings"
 import AppRoutes from "./routes"
 
@@ -5,10 +6,12 @@ function App() {
   const { todayEarnings, refreshTodayEarnings } = useEarnings()
 
   return (
-    <AppRoutes
-      todayEarnings={todayEarnings}
-      refreshEarnings={refreshTodayEarnings}
-    />
+    <Router>
+      <AppRoutes
+        todayEarnings={todayEarnings}
+        refreshEarnings={refreshTodayEarnings}
+      />
+    </Router>
   )
 }
 
