@@ -38,7 +38,7 @@ export const loginUser = async (username, password) => {
     }
 
     const data = await response.json()
-    return { token: data.token, role: data.role }
+    return { token: data.token, role: data.role, username: data.username }
   } catch (error) {
     console.error("Error al iniciar sesión", error)
     throw error

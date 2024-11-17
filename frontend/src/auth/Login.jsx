@@ -21,6 +21,7 @@ const AuthComponent = () => {
       const { token, role } = await loginUser(username, password)
       localStorage.setItem("token", token)
       localStorage.setItem("role", role)
+      localStorage.setItem("username", username)
       setError("")
       navigate("/")
     } catch (err) {
