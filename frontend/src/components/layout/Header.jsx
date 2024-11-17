@@ -56,8 +56,8 @@ const Header = ({ todayEarnings }) => {
   }
 
   return (
-    <div className="w-full h-20 bg-[#323232] grid grid-cols-3 items-center p-6">
-      <div className="relative" ref={menuRef}>
+    <div className="w-full h-20 bg-[#323232] flex items-center justify-between p-4">
+      <div className="relative flex items-center" ref={menuRef}>
         <button
           onClick={toggleMenu}
           className="flex items-center focus:outline-none"
@@ -108,18 +108,33 @@ const Header = ({ todayEarnings }) => {
         )}
       </div>
 
-      <div className="flex justify-center items-center gap-2">
+      <div className="flex items-center gap-2">
         <img src={libraryIcon} alt="library icon" className="w-8 h-8" />
         <Link to={"/"}>
-          <h1 className="text-3xl font-bold">SellBooks</h1>
+          <h1 className="text-3xl font-bold text-white">SellBooks</h1>
         </Link>
       </div>
 
-      <div className="flex gap-3 justify-end relative" ref={userMenuRef}>
-        <div className="relative">
+      <div
+        className="flex flex-col md:flex-row md:gap-2 items-center"
+        ref={userMenuRef}
+      >
+        <Link
+          className="transform transition duration-300 hover:scale-105 order-1 md:order-2"
+          to="/ingresos"
+        >
+          {todayEarnings !== null
+            ? parseFloat(todayEarnings).toLocaleString("es-MX", {
+                style: "currency",
+                currency: "MXN"
+              })
+            : "Cargando..."}
+        </Link>
+
+        <div className="relative order-2 md:order-1 flex items-center">
           <button
             onClick={toggleUserMenu}
-            className="text-white font-bold focus:outline-none"
+            className="text-white border-white font-bold transform transition duration-300 hover:scale-105"
           >
             {username}
           </button>
@@ -134,17 +149,6 @@ const Header = ({ todayEarnings }) => {
             </div>
           )}
         </div>
-        <Link
-          className="transform transition duration-300 hover:scale-105"
-          to="/ingresos"
-        >
-          {todayEarnings !== null
-            ? parseFloat(todayEarnings).toLocaleString("es-MX", {
-                style: "currency",
-                currency: "MXN"
-              })
-            : "Cargando..."}
-        </Link>
       </div>
     </div>
   )
