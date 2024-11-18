@@ -15,6 +15,7 @@ import Footer from "../components/layout/Footer"
 import Header from "../components/layout/Header"
 import AdminRoutes from "./admin"
 import useEarnings from "../hooks/useEarnings"
+import NotFoundPage from "./NotFound"
 
 const AppRoutes = () => {
   const { todayEarnings, refreshTodayEarnings } = useEarnings()
@@ -77,6 +78,7 @@ const AppRoutes = () => {
               </ProtectedRoute>
             }
           />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
       <Footer />
