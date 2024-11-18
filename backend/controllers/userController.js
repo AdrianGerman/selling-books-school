@@ -26,11 +26,15 @@ exports.login = async (req, res) => {
 
     if (user && User.validatePassword(password, user.password)) {
       const token = jwt.sign(
-        { userId: user.id, role: user.role },
+        {
+          userId: user.id,
+          username: user.username,
+          role: user.role
+        },
         process.env.JWT_SECRET,
         { expiresIn: "1h" }
       )
-      res.json({ token, role: user.role, username: user.username })
+      res.json({ token })
     } else {
       res.status(401).json({ message: "Usuario o contraseña incorrecta" })
     }
