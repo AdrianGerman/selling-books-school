@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react"
 import { Link, useNavigate } from "react-router-dom"
+import { jwtDecode } from "jwt-decode"
 import libraryIcon from "../../assets/library.svg"
 
 const Header = ({ todayEarnings }) => {
@@ -14,10 +15,22 @@ const Header = ({ todayEarnings }) => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    const role = localStorage.getItem("role")
-    const user = localStorage.getItem("username")
-    setUserRole(role)
-    setUsername(user || "Usuario")
+    const token = localStorage.getItem("token")
+
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token)
+        setUserRole(decodedToken.role)
+        setUsername(decodedToken.username || "Usuario")
+      } catch (err) {
+        console.error("Error al decodificar el token:", err)
+        setUsername("Usuario")
+        setUserRole(null)
+      }
+    } else {
+      setUsername("Usuario")
+      setUserRole(null)
+    }
   }, [])
 
   useEffect(() => {
