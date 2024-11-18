@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { loginUser } from "./authService"
+import { jwtDecode } from "jwt-decode"
 
 const AuthComponent = () => {
   const [username, setUsername] = useState("")
@@ -18,10 +19,15 @@ const AuthComponent = () => {
   const handleLogin = async (e) => {
     e.preventDefault()
     try {
-      const { token, role } = await loginUser(username, password)
+      const { token } = await loginUser(username, password)
       localStorage.setItem("token", token)
-      localStorage.setItem("role", role)
-      localStorage.setItem("username", username)
+
+      if (token) {
+        const decodedToken = jwtDecode(token)
+
+        const { role = null, username = null } = decodedToken
+      }
+
       setError("")
       navigate("/")
     } catch (err) {
