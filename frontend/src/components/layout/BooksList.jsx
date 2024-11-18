@@ -26,7 +26,8 @@ const BooksList = ({ cycle, books, onBuyPackage, onSelectBooks }) => {
           onClick={() => onBuyPackage(cycle)}
           className="bg-[#613BEC] text-white p-2 rounded transform transition duration-300 hover:bg-[#4c2eb7] hover:scale-105"
         >
-          Comprar paquete
+          <span className="hidden md:inline">Comprar paquete</span>
+          <span className="inline md:hidden">Paquete</span>
         </button>
         <button
           onClick={() => onSelectBooks(cycle)}

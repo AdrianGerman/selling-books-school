@@ -153,7 +153,7 @@ const HomePage = ({ refreshEarnings }) => {
   }
 
   return (
-    <div className="flex flex-col items-center p-4 w-full m-auto bg-[#1f1f1f]">
+    <div className="flex flex-col items-center p-4 w-full m-auto">
       <div className="self-end my-5 p-2 bg-gray-700 rounded shadow-md">
         <p className="text-md font-semibold">
           Total de libros en stock: {totalStock}

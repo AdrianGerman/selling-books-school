@@ -129,11 +129,11 @@ const Header = ({ todayEarnings }) => {
       </div>
 
       <div
-        className="flex flex-col md:flex-row md:gap-2 items-center"
+        className="flex flex-col md:flex-row md:gap-4 items-center"
         ref={userMenuRef}
       >
         <Link
-          className="transform transition duration-300 hover:scale-105 order-1 md:order-2"
+          className="transform transition duration-300 hover:scale-105"
           to="/ingresos"
         >
           {todayEarnings !== null
@@ -144,15 +144,24 @@ const Header = ({ todayEarnings }) => {
             : "Cargando..."}
         </Link>
 
-        <div className="relative order-2 md:order-1 flex items-center">
-          <button
+        <div className="relative flex items-center">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="text-white font-bold transform transition duration-300 hover:scale-105 focus:outline-none cursor-pointer"
             onClick={toggleUserMenu}
-            className="text-white border-white font-bold transform transition duration-300 hover:scale-105"
           >
-            {username}
-          </button>
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M12 2a5 5 0 1 1 -5 5l.005 -.217a5 5 0 0 1 4.995 -4.783z" />
+            <path d="M14 14a5 5 0 0 1 5 5v1a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-1a5 5 0 0 1 5 -5h4z" />
+          </svg>
           {userMenuOpen && (
             <div className="absolute top-full right-0 bg-[#000] rounded shadow-md mt-2 py-2 min-w-[150px]">
+              <div className="px-4 py-2 text-gray-300 font-semibold border-b border-gray-700">
+                {username}
+              </div>
               <button
                 onClick={handleLogout}
                 className="block px-4 py-2 text-white hover:bg-[#4c4c4c] transition-colors duration-300 w-full text-left"
